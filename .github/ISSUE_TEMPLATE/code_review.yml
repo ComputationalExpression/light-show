@@ -1,0 +1,87 @@
+name: Code Review
+description: A code review conducted with a Technical Leader (TL) or the course instructor.
+title: "Code Review: Lab 4, LED Light Show"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fill this out with the programmer present. Leave a box unchecked when the work does
+        not meet it. An unchecked box is information, not a punishment.
+  - type: input
+    attributes:
+      label: Reviewer
+      description: The GitHub username of the TL or instructor conducting this review
+      placeholder: your-github-username
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Functional requirements
+      description: Check each of the following satisfied functional requirements
+      options:
+        - label: "Code solves the issue presented"
+        - label: "Code functions, even if not fully solving the issue presented"
+        - label: "Performance of the code is acceptable"
+  - type: checkboxes
+    attributes:
+      label: Code style and legibility
+      description: Check each of the following checkboxes that describe code legibility
+      options:
+        - label: The code contains comments
+        - label: Variable names are accurate and appropriate
+        - label: The code is easy to read
+        - label: The code is formatted correctly
+  - type: markdown
+    attributes:
+      value: |
+        Walk through the code with the author, with the program running on their board. **Ask one
+        question per concept below, in your own words, about their own code.** Reviews happen at a
+        table where other students can hear, so vary the question from student to student: the
+        concept stays the same, the question does not. Pick from these or make up your own.
+
+        **A list of lights (Stage One)**
+        - Point to the list. What is `leds[0]`, and which physical light is it? How do you know?
+        - What does `len(leds)` return, and what would it return with six lights wired up?
+        - If you swapped the first two Pins in the list, which lines of code would change? Which lights would behave differently?
+
+        **Indexing (Stage Two)**
+        - Run it and choose `2`. Which item in the list blinked, and why is that `leds[1]`?
+        - Type `3`. Which line stops `leds[3]` from ever being asked for, and what would happen without it?
+        - What is the largest index this list has, and how does that relate to `len(leds)`?
+
+        **Looping over a list (Stage Three)**
+        - Run two rounds. How many times did the inner loop body run in total, and how did you count that?
+        - What is `led` on the second trip of the inner loop? Where did that value come from?
+        - Un-indent the inner loop one level in your head. What does the chase do now?
+
+        **Growing a list (Stage Four)**
+        - Type `3`, `1`, `2`. Say out loud what `pattern` holds after each `append`.
+        - Type `5` as a step. Which line decided it was skipped, and what does `len(pattern)` say afterwards?
+        - Why does the pattern loop use `leds[index]` rather than `leds[index - 1]`?
+
+        Check a concept when the answer shows the understanding described, whichever question you asked.
+  - type: checkboxes
+    attributes:
+      label: Code walkthrough
+      description: One box per concept. Check it when the author's answer to your question showed the understanding described.
+      options:
+        - label: "A list of lights: the author can say what each position of the list holds, which physical light it is, and what len returns"
+        - label: "Indexing: the author can explain why the light a person calls N is leds[N - 1] and what stops an index with no item behind it"
+        - label: "Looping over a list: the author can say what the loop variable holds on each trip and count how many times an inner loop body runs"
+        - label: "Growing a list: the author can trace what pattern holds after each append and explain why it stores indexes rather than the numbers typed"
+        - label: "The author described their process well, communicating confidence and understanding of their own code"
+  - type: textarea
+    attributes:
+      label: The Good, The Bad, The Ugly
+      description: Write a short note with at least 3 aspects done well, and 3 aspects on which the code could be improved
+      value: |
+        #### Positives
+        1.
+        2.
+        3.
+        #### Improvements
+        1.
+        2.
+        3.
+    validations:
+      required: true

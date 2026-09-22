@@ -1,0 +1,86 @@
+# Fifteen checks: six run your program, seven read src/main.py, two read docs/summary.md.
+# The six program checks read only the show log at the end of a run, or look at which
+# lights came on, never the story lines. Log values forgive extra spaces, letter case, and a
+# missing colon. Each program check stops after five seconds.
+
+- description: "[SHOW] The show log names you: TODO 1 saves the name, and TODO 11 prints SHOW LOG with it"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_light_show.py::test_program_runs_and_log_names_you
+
+- description: "[SHOW] Lights logs 3: the count comes from len(leds), not from a number typed by hand"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_light_show.py::test_lights_counts_the_list
+
+- description: "[SPOTLIGHT] Choosing 3 blinks the third light and logs 3, 7 logs 3, and 0 logs 1: clamp first, then leds[choice - 1]"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_light_show.py::test_spotlight_picks_the_chosen_light
+
+- description: "[CHASE] Two more rounds light every light exactly twice more, and 2 rounds logs 2: the loop over leds sits inside the loop over range(rounds)"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_light_show.py::test_chase_visits_every_light_once_per_round
+
+- description: "[PATTERN] Typing 3, 3, 2, 1 plays the third light twice, then the second, then the first, and logs 4 steps: append number - 1, then loop over the pattern"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_light_show.py::test_pattern_plays_the_steps_in_order
+
+- description: "[PATTERN] Typing 2, 5, 1 logs 2 steps: a number with no light behind it is skipped by the if, not appended"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_light_show.py::test_pattern_skips_a_number_with_no_light
+
+- description: "[CODE] A list: the three lights belong in one list, leds = [ ... ]"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_a_list_literal
+
+- description: "[CODE] len(...) is called: the number of lights comes from the list"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_len_is_called
+
+- description: "[CODE] A for loop over a list: `for led in leds:` visits every light without counting"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_a_for_loop_over_a_list
+
+- description: "[CODE] .append(...) is called: Stage Four builds the pattern one step at a time"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_append_is_called
+
+- description: "[CODE] A list is indexed, like leds[choice - 1]: the spotlight and the pattern pick a light by position"
+  check: ExecuteCommand
+  options:
+    command: uv run pytest tests/test_structure.py::test_a_list_is_indexed
+
+- src/main.py:
+  - description: "[CODE] No TODO markers remain: delete each TODO comment once its code is written, including Author"
+    check: MatchFileFragment
+    options:
+      fragment: TODO
+      count: 0
+      exact: true
+  - description: "[CODE] At least six comments: explain why an index is choice - 1, or why a loop sits inside another"
+    check: CountSingleLineComments
+    options:
+      language: Python
+      count: 6
+      exact: false
+
+- docs/summary.md:
+  - description: "[SUMMARY] No TODO markers remain in docs/summary.md: replace each one with your answer, then delete it"
+    check: MatchFileFragment
+    options:
+      fragment: TODO
+      count: 0
+      exact: true
+  - description: "[SUMMARY] At least 150 words in docs/summary.md: answer every question in full sentences"
+    check: CountFileWords
+    options:
+      count: 150
+      exact: false
