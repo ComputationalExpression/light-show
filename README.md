@@ -242,8 +242,9 @@ and about your own code, so the questions differ from student to student. Be rea
   positions rather than the numbers typed
 
 **Your review must be completed during the lab session on the day this lab is due.** If you
-cannot attend that lab and complete your review then, make arrangements to complete it
-beforehand at office hours:
+know in advance that you cannot attend that lab, make arrangements to complete your review
+beforehand at office hours. If you submitted this lab on time but missed the code review, you
+can make it up at office hours within one week of the due date:
 
 * **Technical Leaders**, listed on the calendar at
   [cis.allegheny.edu/community/news](https://www.cis.allegheny.edu/community/news/)
@@ -254,7 +255,8 @@ beforehand at office hours:
 
 Commit and push often. The last version pushed before the deadline is the one that gets
 graded. If you need more time, apply a late token with
-[this form](https://forms.gle/3nGbpaNrG96DpLLdA).
+[this form](https://forms.gle/3nGbpaNrG96DpLLdA). One token covers both parts of a lab: the
+submission and the code review.
 
 **In the terminal:**
 
