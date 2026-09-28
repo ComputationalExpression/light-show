@@ -18,6 +18,7 @@ when the list grows to six.
   * [The show log](#the-show-log)
   * [Expected output](#expected-output)
 * [Getting started](#getting-started)
+  * [Testing on your Pico](#testing-on-your-pico)
 * [Evaluation](#evaluation)
   * [Programming, 3.0 points](#programming-30-points)
   * [Code quality and style, 1.0 point](#code-quality-and-style-10-point)
@@ -154,13 +155,23 @@ Pattern steps: 3
 
 ## Getting started
 
-Open `src/main.py` and work through the `TODO` markers in order. Run it on your Pico as you go
-by clicking **Run** in the bar along the bottom of the window, or from the terminal against a
-plain Python interpreter for the parts that do not depend on real hardware timing:
+Open `src/main.py` and work through the `TODO` markers in order. As you go, run it from the
+terminal:
 
 ```text
 uv run python src/main.py
 ```
+
+This runs your program with plain Python on your laptop, without the hardware. It checks what
+your program does, but no LED lights up.
+
+### Testing on your Pico
+
+When your program is complete, test it on your Pico to verify that it works on the hardware.
+Plug in the board, open `src/main.py`, and click **Run** in the bar along the bottom of the
+window. **Board Connected** must show beside it:
+
+![The bar along the bottom of VS Code, showing Board Connected and the Run button](images/run-button.png)
 
 > [!IMPORTANT]
 > Run every command in this README from the assignment's **working directory**, the top-level
