@@ -68,13 +68,13 @@ two legs.
 ![The same circuit from the side](images/three-leds-side.jpg)
 
 The steps are on the
-[Week 6 Session 2 slides](https://computationalexpression.com/slides/week-06-session-2/). If a
+[Week 6 Session 3 slides](https://computationalexpression.com/slides/week-06-session-3/). If a
 light will not come on, ask an instructor or TL. Do not troubleshoot hardware alone the night
 before it is due.
 
 ## The four stages
 
-Everything this lab asks for is covered by Friday of Week 6.
+Everything this lab asks for is covered by Monday of Week 7.
 
 **The story is yours to change.** Every message the program prints is your wording. Two things
 stay fixed, because the automated checks depend on them: the questions are asked in the order
