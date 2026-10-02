@@ -2,8 +2,8 @@
 
 |Item |       |
 |:----|:------|
-|Released |Week 6, Friday lab |
-|Due |See the [course schedule](https://computationalexpression.com/schedule/) |
+|Released |Friday, October 2, at the lab session |
+|Due |Friday, October 16, 2:30pm |
 |Progress |[![Grade](../../actions/workflows/main.yml/badge.svg?branch=main)](../../actions/workflows/main.yml) |
 
 Three LEDs on a breadboard, and one list to hold them. A list lets you write each stage of the
@@ -50,28 +50,21 @@ Specifically, by the end of this lab you should be able to:
 You need your Pico 2 W, a breadboard, three LEDs, three resistors (220 or 330 ohms, either
 works), and jumper wires. Unplug the USB cable before you touch the wiring.
 
-![Three LEDs wired to the Pico on a breadboard](images/three-leds-front.jpg)
+**Before you start the lab, wire one light on GP15 and get it to light up**, following the
+[Week 6 Session 2 slides](https://computationalexpression.com/slides/week-06-session-2/). Then
+wire GP14 and GP13 the same way:
 
-1. Seat the Pico across the center channel of the breadboard with the USB connector at one
-   end. Each Pico pin now has its own row of free holes beside it
-2. Run a jumper wire from a **GND** pin (pin 18 is between GP13 and GP14) to the blue **-** rail.
-   One ground rail serves every LED
-3. For each LED: put its **long leg** in an empty row and its **short leg** in the next row
-   over. A jumper wire from the GPIO pin's row to the long leg's row, and a resistor from the
-   short leg's row to the **-** rail
-4. Use **GP15**, **GP14**, and **GP13**, in that order. `leds[0]` in the program is the light
-   on GP15
+![Three LEDs wired to GP15, GP14 and GP13 on a half breadboard](images/three-led-circuit.svg)
 
-`Pin(15, Pin.OUT)` names the GPIO number printed on the [pinout](images/pico-2-pinout.svg),
-not the physical pin position. An LED that never lights is almost always in backward: swap its
-two legs.
+`leds[0]` in the program is the light on GP15. `Pin(15, Pin.OUT)` names the GPIO number
+printed on the [pinout](images/pico-2-pinout.svg), not the physical pin position. An LED that
+never lights is almost always in backward: swap its two legs.
 
-![The same circuit from the side](images/three-leds-side.jpg)
+**You may add more than three lights.** Wire each one the same way to another GPIO pin and add
+its `Pin` to the end of `leds`. The checks work with any number of lights from three up.
 
-The steps are on the
-[Week 6 Session 2 slides](https://computationalexpression.com/slides/week-06-session-2/). If a
-light will not come on, ask an instructor or TL. Do not troubleshoot hardware alone the night
-before it is due.
+If a light will not come on, ask an instructor or TL. Do not troubleshoot hardware alone the
+night before it is due.
 
 ## The four stages
 
@@ -85,7 +78,7 @@ the starter lists them, and the show log at the end keeps its labels.
 Ask the user's name, announce how many lights there are with `len(leds)`, and light each one in
 turn with `for led in leds`.
 
-**Stage Two: Spotlight.** The user picks a light by number, `1` to `3`. People count from `1`
+**Stage Two: Spotlight.** The user picks a light by number, from `1` up. People count from `1`
 and lists count from `0`, so the chosen light is `leds[choice - 1]`. An `if`/`elif` pulls an
 out-of-range answer back to the nearest light first. The chosen light blinks five times.
 
@@ -165,6 +158,10 @@ uv run python src/main.py
 This runs your program with plain Python on your laptop, without the hardware. It checks what
 your program does, but no LED lights up.
 
+> [!IMPORTANT]
+> Run every command in this README from the assignment's **working directory**, the top-level
+> folder you land in right after cloning, not from inside `src`.
+
 ### Testing on your Pico
 
 When your program is complete, test it on your Pico to verify that it works on the hardware.
@@ -172,10 +169,6 @@ Plug in the board, open `src/main.py`, and click **Run** in the bar along the bo
 window. **Board Connected** must show beside it:
 
 ![The bar along the bottom of VS Code, showing Board Connected and the Run button](images/run-button.png)
-
-> [!IMPORTANT]
-> Run every command in this README from the assignment's **working directory**, the top-level
-> folder you land in right after cloning, not from inside `src`.
 
 ## Evaluation
 
@@ -201,11 +194,12 @@ also prints a `uv run pytest ...` command. Run it: the last lines name the log l
 out wrong, what it said, what was expected, and the answers that were typed. Thirteen of the
 checks are about your code:
 
-* the show log names you, and `Lights` logs `3`
-* choosing `3` blinks the third light and logs `3`; `7` logs `3` and `0` logs `1`
+* the show log names you, and `Lights` logs how many lights are in `leds`
+* choosing `3` blinks the third light and logs `3`; a number past the last light logs the last
+  light, and `0` logs `1`
 * two more rounds of the chase light every light exactly twice more
 * typing `3`, `3`, `2`, `1` plays the third light twice, then the second, then the first, and
-  logs `4` steps; typing `2`, `5`, `1` logs `2`
+  logs `4` steps; a number with no light behind it is skipped
 * the code has a list, calls `len`, loops over a list with `for`, calls `append`, and indexes a
   list
 * no `TODO` markers remain, and there are at least six comments

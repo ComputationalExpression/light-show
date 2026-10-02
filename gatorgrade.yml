@@ -8,12 +8,12 @@
   options:
     command: uv run pytest tests/test_light_show.py::test_program_runs_and_log_names_you
 
-- description: "[SHOW] Lights logs 3: the count comes from len(leds), not from a number typed by hand"
+- description: "[SHOW] Lights logs how many lights are in leds, at least 3: the count comes from len(leds), not from a number typed by hand"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_light_show.py::test_lights_counts_the_list
 
-- description: "[SPOTLIGHT] Choosing 3 blinks the third light and logs 3, 7 logs 3, and 0 logs 1: clamp first, then leds[choice - 1]"
+- description: "[SPOTLIGHT] Choosing 3 blinks the third light and logs 3, a number past the last light logs the last light, and 0 logs 1: clamp first, then leds\\[choice - 1]"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_light_show.py::test_spotlight_picks_the_chosen_light
@@ -28,12 +28,12 @@
   options:
     command: uv run pytest tests/test_light_show.py::test_pattern_plays_the_steps_in_order
 
-- description: "[PATTERN] Typing 2, 5, 1 logs 2 steps: a number with no light behind it is skipped by the if, not appended"
+- description: "[PATTERN] Typing 2, a number past the last light, and 1 logs 2 steps: a number with no light behind it is skipped by the if, not appended"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_light_show.py::test_pattern_skips_a_number_with_no_light
 
-- description: "[CODE] A list: the three lights belong in one list, leds = [ ... ]"
+- description: "[CODE] A list: the lights belong in one list, leds = \\[ ... ]"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_structure.py::test_a_list_literal
@@ -53,7 +53,7 @@
   options:
     command: uv run pytest tests/test_structure.py::test_append_is_called
 
-- description: "[CODE] A list is indexed, like leds[choice - 1]: the spotlight and the pattern pick a light by position"
+- description: "[CODE] A list is indexed, like leds\\[choice - 1]: the spotlight and the pattern pick a light by position"
   check: ExecuteCommand
   options:
     command: uv run pytest tests/test_structure.py::test_a_list_is_indexed

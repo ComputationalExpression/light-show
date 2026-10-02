@@ -6,9 +6,10 @@ student's to word. Log values are matched loosely: any amount of whitespace,
 any letter case, and the colon is optional, so `print("Lights:", n)`,
 `print("Lights: " + str(n))`, and `print(f"Lights: {n}")` all read the same.
 
-The lights are told apart by the GPIO number each `Pin(...)` was made with,
-in the order they were made, so the checks call them the first, second and
-third light and never depend on the actual pin numbers. Checks that count
+The lights are told apart by the order each `Pin(...)` was made in, so the
+checks call them the first, second and third light and never depend on the
+actual pin numbers. A student may wire more than three lights; every check
+counts the lights the program made and expects at least three. Checks that count
 flashes compare two runs that differ in one answer, so a fixed extra flash
 somewhere else does not fail anyone: only the change has to match.
 
@@ -73,9 +74,19 @@ def lit_sequence(recorder):
     return sequence
 
 
+def light_count(capsys):
+    """How many external lights the program makes, from one quiet run."""
+    run(capsys)
+    recorder = mockro.get_recorder()
+    pins = {id(args[0]) for args, _ in recorder.calls("machine.Pin.init")
+            if len(args) > 2 and isinstance(args[2], int)}
+    return len(pins)
+
+
 def counts(sequence):
     """How many times each light came on, as {position: count}."""
-    return {light: sequence.count(light) for light in (1, 2, 3)}
+    lights = {light for light in sequence if light is not None} | {1, 2, 3}
+    return {light: sequence.count(light) for light in lights}
 
 
 def log_value(out, label):
@@ -119,7 +130,8 @@ def difference(capsys, **pair):
     _, _, seq_low = run(capsys, **{question: low})
     _, _, seq_high = run(capsys, **{question: high})
     low_counts, high_counts = counts(seq_low), counts(seq_high)
-    return {light: high_counts[light] - low_counts[light] for light in (1, 2, 3)}
+    lights = set(low_counts) | set(high_counts)
+    return {light: high_counts.get(light, 0) - low_counts.get(light, 0) for light in lights}
 
 
 def test_program_runs_and_log_names_you(capsys):
@@ -130,12 +142,15 @@ def test_program_runs_and_log_names_you(capsys):
 
 
 def test_lights_counts_the_list(capsys):
-    expect(capsys, "Lights", 3)
+    lights = light_count(capsys)
+    assert lights >= 3, f"the program made {lights} lights, expected at least 3: leds = [Pin(15, Pin.OUT), Pin(14, Pin.OUT), Pin(13, Pin.OUT)]"
+    expect(capsys, "Lights", lights)
 
 
 def test_spotlight_picks_the_chosen_light(capsys):
+    lights = light_count(capsys)
     expect(capsys, "Spotlight", 3, choice=3)
-    expect(capsys, "Spotlight", 3, choice=7)
+    expect(capsys, "Spotlight", lights, choice=lights + 4)
     expect(capsys, "Spotlight", 1, choice=0)
     # Choosing 3 instead of 1 moves the spotlight flashes from the first light
     # to the third, and leaves the second alone.
@@ -147,8 +162,11 @@ def test_spotlight_picks_the_chosen_light(capsys):
 
 def test_chase_visits_every_light_once_per_round(capsys):
     expect(capsys, "Chase rounds", 2, rounds=2)
+    lights = light_count(capsys)
     more = difference(capsys, rounds=(1, 3))
-    assert more == {1: 2, 2: 2, 3: 2}, f"two more rounds lit the lights {more} more times (first, second, third), expected 2 each: the loop over leds goes inside the loop over range(rounds)"
+    want = {light: 2 for light in range(1, lights + 1)}
+    got = {light: more.get(light, 0) for light in sorted(set(more) | set(want))}
+    assert got == want, f"two more rounds lit the lights {got} more times (by light number), expected 2 each: the loop over leds goes inside the loop over range(rounds)"
 
 
 def test_pattern_plays_the_steps_in_order(capsys):
@@ -160,6 +178,7 @@ def test_pattern_plays_the_steps_in_order(capsys):
 
 
 def test_pattern_skips_a_number_with_no_light(capsys):
-    # 5 has no light behind it, so it is skipped rather than crashing, and
-    # only the two valid steps are kept.
-    expect(capsys, "Pattern steps", 2, pattern=[2, 5, 1])
+    # Two past the last light has no light behind it, so it is skipped rather
+    # than crashing, and only the two valid steps are kept.
+    missing = light_count(capsys) + 2
+    expect(capsys, "Pattern steps", 2, pattern=[2, missing, 1])
